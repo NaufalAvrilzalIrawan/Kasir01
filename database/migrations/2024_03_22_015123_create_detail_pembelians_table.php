@@ -12,7 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('detail_pembelians', function (Blueprint $table) {
-            $table->id();
+            $table->id('detailID');
+            $table->bigInteger('pembelianID')->unsigned(); //foreign key
+            $table->foreign('pembelianID')
+                  ->references('pembelianID')
+                  ->on('pembelian')
+                  ->onDelete('cascade');
+            $table->bigInteger('produkID')->unsigned(); //foreign key
+            $table->foreign('produkID')
+                  ->references('produkID')
+                  ->on('produk')
+                  ->onDelete('cascade');
+            $table->string('jumlah');
+            $table->decimal('subtotal');
             $table->timestamps();
         });
     }

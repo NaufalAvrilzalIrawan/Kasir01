@@ -11,8 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('pembelians', function (Blueprint $table) {
-            $table->id();
+        Schema::create('pembelian', function (Blueprint $table) {
+            $table->id('pembelianID');
+            $table->bigInteger('userID')->unsigned(); //foreign key
+            $table->foreign('userID')
+                  ->references('userID')
+                  ->on('user')
+                  ->onDelete('cascade');
+            $table->string('namaPelanggan');
+            $table->decimal('total');
+            $table->date('tanggal');
             $table->timestamps();
         });
     }
