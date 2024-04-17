@@ -2,17 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DetailPembelianRequest;
 use App\Models\DetailPembelian;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class DetailPembelianController extends Controller
 {
+    public function __construct(protected DetailPembelian $detail)
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $detail = $this->detail->get();
+
+        return response()->json($detail);
     }
 
     /**
@@ -26,9 +35,20 @@ class DetailPembelianController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(DetailPembelianRequest $request)
     {
-        //
+        $data = $request->validated();
+
+        $detail = $this->detail;
+
+        $detail->pembelianID = $data['pembelianID'];
+        $detail->produkID = $data['produkID'];
+        $detail->jumlah = $data['jumlah'];
+        $detail->subtotal = $data['subtotal'];
+
+        $detail->save();
+
+        return response()->json($detail);
     }
 
     /**

@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class PembelianController extends Controller
 {
+    public function __construct(protected Pembelian $pembelian)
+    {
+        //
+    }
+
     /**
      * Display a listing of the resource.
      */
