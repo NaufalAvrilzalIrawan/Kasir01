@@ -34,7 +34,7 @@ class UserController extends Controller
         if (Auth::attempt($data)) {
             $user = Auth::user();
             $token = $user->createToken('authToken')->plainTextToken;
-            return response()->json(['user' => $user, 'token' => $token, 'role_id' => $user->role_id]);
+            return response()->json(['user' => $user, 'token' => $token]);
         }
         else {
             return response()->json('Email atau Password salah');

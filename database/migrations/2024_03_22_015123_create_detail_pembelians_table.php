@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('detail_pembelians', function (Blueprint $table) {
+        Schema::create('detailpembelian', function (Blueprint $table) {
             $table->id('detailID');
             $table->bigInteger('pembelianID')->unsigned(); //foreign key
             $table->foreign('pembelianID')

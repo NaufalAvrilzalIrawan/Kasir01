@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\DetailPembelianRequest;
 use App\Models\DetailPembelian;
+use App\Models\Produk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class DetailPembelianController extends Controller
 {
-    public function __construct(protected DetailPembelian $detail)
+    public function __construct(protected DetailPembelian $detail, protected Produk $produk)
     {
         //
     }
@@ -38,13 +39,18 @@ class DetailPembelianController extends Controller
     public function store(DetailPembelianRequest $request)
     {
         $data = $request->validated();
+        $produkID = $data['produkID'];
+        $jumlah = $data['jumlah'];
+        $produk = $this->produk->find($produkID);
+        $subtotal = $produk->harga * $jumlah;
 
         $detail = $this->detail;
 
         $detail->pembelianID = $data['pembelianID'];
-        $detail->produkID = $data['produkID'];
-        $detail->jumlah = $data['jumlah'];
-        $detail->subtotal = $data['subtotal'];
+        $detail->produkID = $produkID;
+        $detail->jumlah = $jumlah;
+        $detail->subtotal = $subtotal;
+        dd($detail);
 
         $detail->save();
 
@@ -54,9 +60,11 @@ class DetailPembelianController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(DetailPembelian $detailPembelian)
+    public function show($id)
     {
-        //
+        $detail = $this->detail->find($id);
+
+        return response()->json($detail);
     }
 
     /**
@@ -70,16 +78,31 @@ class DetailPembelianController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, DetailPembelian $detailPembelian)
+    public function update(DetailPembelianRequest $request, $id)
     {
-        //
+        $data = $request->validated();
+        $detail = $this ->detail->finde($id);
+        if ($detail == null) {
+            return response()->json('data dengan id ' . $id . ' tidak ditemukan');
+        }
+
+        $detail->pembelianID = $data['pembelianID'];
+        $detail->produkID = $data['produkID'];
+        $detail->jumlah = $data['jumlah'];
+        $detail->subtotal = $data['subtotal'];
+
+        $detail->update();
+        return response()->json($detail);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(DetailPembelian $detailPembelian)
+    public function destroy($id)
     {
-        //
+        $detail = $this->detail->find($id);
+        $detail->delete();
+
+        return response()->json($detail);
     }
 }

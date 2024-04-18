@@ -18,9 +18,9 @@ return new class extends Migration
                   ->references('userID')
                   ->on('user')
                   ->onDelete('cascade');
-            $table->string('namaPelanggan');
-            $table->decimal('total');
-            $table->date('tanggal');
+            $table->string('namaPelanggan')->nullable();
+            $table->decimal('total')->nullable();
+            $table->date('tanggal')->nullable();
             $table->timestamps();
         });
     }

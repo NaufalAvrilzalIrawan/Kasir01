@@ -25,29 +25,38 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/login', [UserController::class, 'login']);
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('checkRole:1')->group(function(){
     Route::get('/user', [UserController::class, 'index']);
     Route::post('/user/simpan', [UserController::class, 'store']);
     Route::get('/user{id}', [UserController::class, 'show']);
     Route::post('/user/ubah{id}', [UserController::class, 'update']);
     Route::get('/user/hapus{id}', [UserController::class, 'destroy']);
-    Route::get('/logout', [UserController::class, 'logout']);
+});
+Route::get('/logout', [UserController::class, 'logout']);
 
-    Route::get('/produk', [ProdukController::class, 'index']);
-    Route::post('/produk/simpan', [ProdukController::class, 'store']);
-    Route::get('/produk{id}', [ProdukController::class, 'show']);
-    Route::post('/produk/ubah{id}', [ProdukController::class, 'update']);
-    Route::get('/produk/hapus{id}', [ProdukController::class, 'destroy']);
+Route::get('/produk', [ProdukController::class, 'index']);
+Route::post('/produk/simpan', [ProdukController::class, 'store']);
+Route::get('/produk{id}', [ProdukController::class, 'show']);
+Route::post('/produk/ubah{id}', [ProdukController::class, 'update']);
+Route::get('/produk/hapus{id}', [ProdukController::class, 'destroy']);
 
-    Route::get('/member', [MemberController::class, 'index']);
-    Route::post('/member/simpan', [MemberController::class, 'store']);
-    Route::get('/member{id}', [MemberController::class, 'show']);
-    Route::post('/member/ubah{id}', [MemberController::class, 'update']);
-    Route::get('/member/hapus{id}', [MemberController::class, 'destroy']);
+Route::get('/member', [MemberController::class, 'index']);
+Route::post('/member/simpan', [MemberController::class, 'store']);
+Route::get('/member{id}', [MemberController::class, 'show']);
+Route::post('/member/ubah{id}', [MemberController::class, 'update']);
+Route::get('/member/hapus{id}', [MemberController::class, 'destroy']);
 
-    Route::get('/detailpembelian', [DetailPembelianController::class, 'index']);
-    Route::post('/detailpembelian/simpan', [DetailPembelianController::class, 'store']);
-    Route::get('/detailpembelian{id}', [DetailPembelianController::class, 'show']);
-    Route::post('/detailpembelian/ubah{id}', [DetailPembelianController::class, 'update']);
-    Route::get('/detailpembelian/hapus{id}', [DetailPembelianController::class, 'destroy']);
+Route::get('/detailpembelian', [DetailPembelianController::class, 'index']);
+Route::post('/detailpembelian/simpan', [DetailPembelianController::class, 'store']);
+Route::get('/detailpembelian{id}', [DetailPembelianController::class, 'show']);
+Route::post('/detailpembelian/ubah{id}', [DetailPembelianController::class, 'update']);
+Route::get('/detailpembelian/hapus{id}', [DetailPembelianController::class, 'destroy']);
+
+Route::get('/pembelian', [PembelianController::class, 'index']);
+Route::post('/pembelian/siap', [PembelianController::class, 'create']);
+Route::post('/pembelian/simpan{id}', [PembelianController::class, 'store']);
+Route::get('/pembelian{id}', [PembelianController::class, 'show']);
+Route::post('/pembelian/ubah{id}', [PembelianController::class, 'update']);
+Route::get('/pembelian/hapus{id}', [PembelianController::class, 'destroy']);
+Route::middleware('auth:sanctum')->group(function () {
 });
