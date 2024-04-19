@@ -40,21 +40,33 @@ class DetailPembelianController extends Controller
     {
         $data = $request->validated();
         $produkID = $data['produkID'];
-        $jumlah = $data['jumlah'];
         $produk = $this->produk->find($produkID);
+        $stok = $produk->stok - $data['jumlah'];
+        $produk->stok = $stok;
+        $produk->save();
+        $jumlah = $data['jumlah'];
         $subtotal = $produk->harga * $jumlah;
-
+        
         $detail = $this->detail;
 
         $detail->pembelianID = $data['pembelianID'];
         $detail->produkID = $produkID;
         $detail->jumlah = $jumlah;
         $detail->subtotal = $subtotal;
-        dd($detail);
-
+        
         $detail->save();
+        $total = $this->detail->where('pembelianID', $data['pembelianID'])->sum('subtotal');
 
-        return response()->json($detail);
+
+        $response = [
+            'detailID' => $detail->detailID,
+            'produk' => $detail->produk->namaProduk, // Example: Get product name via relationship
+            'jumlah' => $detail->jumlah,
+            'subtotal' => $detail->subtotal,
+            'total' => $total
+        ];
+
+        return response()->json($response);
     }
 
     /**
@@ -101,8 +113,16 @@ class DetailPembelianController extends Controller
     public function destroy($id)
     {
         $detail = $this->detail->find($id);
-        $detail->delete();
+        $produk = $this->produk->find($detail->produkID);
 
-        return response()->json($detail);
+        $int = (int)$detail->jumlah;
+        $restok = $produk->stok + $int;
+        $produk->stok = $restok;
+        
+        $produk->update();
+        $detail->delete();
+        $total = $this->detail->where('pembelianID', $detail->pembelianID)->sum('subtotal');
+        
+        return response()->json($total);
     }
 }

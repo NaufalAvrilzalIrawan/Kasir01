@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\DetailPembelian;
+use App\Models\Member;
 use App\Models\Pembelian;
+use App\Models\Produk;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,7 +13,7 @@ use Illuminate\Support\Facades\Validator;
 
 class PembelianController extends Controller
 {
-    public function __construct(protected Pembelian $pembelian, protected DetailPembelian $detail)
+    public function __construct(protected Pembelian $pembelian, protected DetailPembelian $detail, protected Produk $produk, protected Member $member)
     {
         //
     }
@@ -25,19 +27,35 @@ class PembelianController extends Controller
         return response()->json($pembelian);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
+    public function transaksi() {
+        $pembelian = $this->pembelian;
+        $produk = $this->produk->get();
+
+        return view('pembelian.transaksi', [
+            'pembelian' => $pembelian,
+            'produk' => $produk,
+        ]);
+    }
     public function create(Request $request)
     {
         $pembelian = $this->pembelian;
+        $produk = $this->produk->get();
+        $member = $this->member->get();
         $userID = Auth::id();
 
-        $pembelian->userID = $userID;
-        $pembelian->tanggal = Carbon::now('Asia/Jakarta');
+        $pembelian->userID = 1;
+        $pembelian->tanggal = now('Asia/Jakarta');
+        $tanggal = explode(' ', $pembelian->tanggal);
 
         $pembelian->save();
-        return response()->json($pembelian);
+
+        return view('pembelian.transaksi', [
+            'pembelian' => $pembelian,
+            'produk' => $produk,
+            'members' => $member,
+            'tanggal' => $tanggal,
+            'userID' => $userID
+        ]);
     }
 
     /**
@@ -72,9 +90,13 @@ class PembelianController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Pembelian $pembelian)
+    public function show($id)
     {
-        //
+        $pembelian = $this->pembelian->with('user', 'detailPembelian')->find($id);
+        if($pembelian == null) {
+            return response()->json(['error'=>'tidak ada data']);
+        }
+        return response()->json($pembelian);
     }
 
     /**
@@ -96,8 +118,10 @@ class PembelianController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Pembelian $pembelian)
+    public function destroy($id)
     {
-        //
+        $pembelian = $this->pembelian->find($id);
+        $pembelian->delete();
+        return response()->json($pembelian);
     }
 }

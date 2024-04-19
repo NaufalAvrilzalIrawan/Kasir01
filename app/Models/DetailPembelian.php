@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class DetailPembelian extends Model
 {
@@ -13,7 +13,7 @@ class DetailPembelian extends Model
 
     protected $table = 'detailPembelian';
 
-    protected $primaryKey = 'detailPembelianID';
+    protected $primaryKey = 'detailID';
     
     protected $keyType = 'integer';
 
@@ -29,9 +29,9 @@ class DetailPembelian extends Model
         return $this->belongsTo(Pembelian::class, 'pembelianID', 'pembelianID');
     }
     
-    public function produk(): HasMany
+    public function produk(): HasOne
     {
-        return $this->hasMany(Produk::class, 'produkID', 'produkID');
+        return $this->hasOne(Produk::class, 'produkID', 'produkID');
     }
 
 }

@@ -43,12 +43,12 @@ class DetailPembelianRequest extends FormRequest
             'jumlah.required' => 'Tolong masukan jumlah yang dibeli',
             'jumlah.integer' => 'Jumlah produk harus berupa angka',
 
-            'subtotal.required' => 'Kesalahan sistem',
-            'subtotal.integer' => 'Kesalahan sistem'
+            'subtotal.required' => 'Tidak ada',
+            'subtotal.integer' => 'Integer'
         ]; 
     }
 
     public function failedValidation(Validator $validator) {
-        throw new HttpResponseException(response()->json($validator->errors(), 422));
+        throw new HttpResponseException(response()->json($validator->errors()));
     }
 }
