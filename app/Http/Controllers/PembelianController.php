@@ -23,8 +23,10 @@ class PembelianController extends Controller
      */
     public function index()
     {
-        $pembelian = $this->pembelian->with('user','detailPembelian')->get();
-        return response()->json($pembelian);
+        $pembelians = $this->pembelian->with('user','detailPembelian','detailPembelian.produk')->get();
+        return view('pembelian.index', [
+            'pembelians' => $pembelians
+        ]);
     }
 
     public function transaksi() {
@@ -143,6 +145,7 @@ class PembelianController extends Controller
 
         $pembelian->update();
 
+        return redirect('/pembelian');
         return response()->json($pembelian);
     }
 

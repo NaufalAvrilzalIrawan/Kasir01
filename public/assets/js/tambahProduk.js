@@ -25,7 +25,7 @@ $(document).ready(function() {
         $('tbody').append(newRow);
 
         // Update total in table footer (assuming response includes total)
-        $('tfoot th:last-child').text(response.total);
+        $('#totalCol').text(response.total);
 
         $('#total').val(response.total);
         $('#totalAkhir').val(response.totalAkhir);
@@ -51,7 +51,7 @@ $(document).ready(function() {
         row.remove();
 
         // Recalculate and update the total in the table footer
-        $('tfoot th:last-child').text(response.total);
+        $('#totalCol').text(response.total);
         $('#total').val(response.total);
         $('#totalAkhir').val(response.totalAkhir);
       },

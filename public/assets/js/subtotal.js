@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     var totalAkhirInput = document.getElementById('totalAkhir');
     var bayarInput = document.getElementById('bayar');
     var kembalianInput = document.getElementById('kembalian');
-    var selesaiBtnInput = document.getElementById('selesaiBtn');
+    var selesaiBtn = document.getElementById('selesaiBtn');
 
     function calculateSubtotal() {
         var selectedOption = produkSelect.options[produkSelect.selectedIndex];
