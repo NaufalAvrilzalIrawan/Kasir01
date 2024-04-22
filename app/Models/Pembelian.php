@@ -21,7 +21,10 @@ class Pembelian extends Model
         'userID',
         'namaPelanggan',
         'total',
-        'tanggal',
+        'totalAkhir',
+        'bayar',
+        'kembalian',
+        'tanggal'
     ];
 
     public function user(): BelongsTo

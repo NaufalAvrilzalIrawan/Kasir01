@@ -26,8 +26,9 @@ class DetailPembelianRequest extends FormRequest
         return [
             'pembelianID' => 'required|integer',
             'produkID' => 'required|integer',
+            'member' => 'required|string',
             'jumlah' => 'required|integer',
-            'subtotal' => 'required|integer'
+            'subtotal' => 'required|numeric'
         ];
     }
 
@@ -39,6 +40,9 @@ class DetailPembelianRequest extends FormRequest
 
             'produkID.required' => 'Harus terdapat ID produk',
             'produkID.integer' => 'ID produk harus berupa angka',
+            
+            'member.required' => 'Harus terdapat pelanggan',
+            'member.string' => 'Pelanggan harus berupa karakter',
 
             'jumlah.required' => 'Tolong masukan jumlah yang dibeli',
             'jumlah.integer' => 'Jumlah produk harus berupa angka',

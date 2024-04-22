@@ -110,9 +110,40 @@ class PembelianController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Pembelian $pembelian)
+    public function update(Request $request, $id)
     {
-        //
+        $pembelian = $this->pembelian->find($id);
+        if ($pembelian == null) {
+            return response()->json('data tidak ditemukan');
+        }
+
+        $data = $request->only([
+            'total',
+            'totalAkhir',
+            'bayar',
+            'kembalian'
+        ]);
+
+        $validator = Validator::make($data, [
+            'namaPelanggan' => 'nullable|string',
+            'total' => 'required|numeric',
+            'totalAkhir' => 'required|numeric',
+            'bayar' => 'required|numeric',
+            'kembalian' => 'nullable|numeric'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+
+        $pembelian->total = $data['total'];
+        $pembelian->totalAkhir = $data['totalAkhir'];
+        $pembelian->bayar = $data['bayar'];
+        $pembelian->kembalian = $data['kembalian'];
+
+        $pembelian->update();
+
+        return response()->json($pembelian);
     }
 
     /**

@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\DetailPembelianRequest;
 use App\Models\DetailPembelian;
+use App\Models\Pembelian;
 use App\Models\Produk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class DetailPembelianController extends Controller
 {
-    public function __construct(protected DetailPembelian $detail, protected Produk $produk)
+    public function __construct(protected DetailPembelian $detail, protected Produk $produk, protected Pembelian $pembelian)
     {
         //
     }
@@ -46,6 +47,10 @@ class DetailPembelianController extends Controller
         $produk->save();
         $jumlah = $data['jumlah'];
         $subtotal = $produk->harga * $jumlah;
+
+        $pembelian = $this->pembelian->find($data['pembelianID']);
+        $pembelian->namaPelanggan = $data['member'];
+        $pembelian->update();
         
         $detail = $this->detail;
 
@@ -56,14 +61,25 @@ class DetailPembelianController extends Controller
         
         $detail->save();
         $total = $this->detail->where('pembelianID', $data['pembelianID'])->sum('subtotal');
-
+        $totalAkhir = $total;
+        if ($data['member'] != 'Bukan member') {
+            if ($total >= 100000){
+                $potong = $total * 0.10;
+                $totalAkhir = $total - $potong;
+            }
+            elseif ($total >= 50000){
+                $potong = $total * 0.05;
+                $totalAkhir = $total - $potong;
+            }
+        }
 
         $response = [
             'detailID' => $detail->detailID,
             'produk' => $detail->produk->namaProduk, // Example: Get product name via relationship
             'jumlah' => $detail->jumlah,
             'subtotal' => $detail->subtotal,
-            'total' => $total
+            'total' => $total,
+            'totalAkhir' => $totalAkhir
         ];
 
         return response()->json($response);
@@ -113,6 +129,7 @@ class DetailPembelianController extends Controller
     public function destroy($id)
     {
         $detail = $this->detail->find($id);
+        $pembelian = $this->pembelian->find($detail->pembelianID);
         $produk = $this->produk->find($detail->produkID);
 
         $int = (int)$detail->jumlah;
@@ -122,7 +139,23 @@ class DetailPembelianController extends Controller
         $produk->update();
         $detail->delete();
         $total = $this->detail->where('pembelianID', $detail->pembelianID)->sum('subtotal');
+        $totalAkhir = $total;
+        if ($pembelian->namaPelanggan != 'Bukan member') {
+            if ($total >= 100000){
+                $potong = $total * 0.10;
+                $totalAkhir = $total - $potong;
+            }
+            elseif ($total >= 50000){
+                $potong = $total * 0.05;
+                $totalAkhir = $total - $potong;
+            }
+        }
         
-        return response()->json($total);
+        $response = [
+            'total' => $total,
+            'totalAkhir' => $totalAkhir
+        ];
+
+        return response()->json($response);
     }
 }

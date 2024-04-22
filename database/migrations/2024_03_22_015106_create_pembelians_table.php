@@ -19,7 +19,10 @@ return new class extends Migration
                   ->on('user')
                   ->onDelete('cascade');
             $table->string('namaPelanggan')->nullable();
-            $table->decimal('total')->nullable();
+            $table->decimal('total', 10)->nullable();
+            $table->decimal('totalAkhir', 10)->nullable();
+            $table->decimal('bayar', 10)->nullable();
+            $table->decimal('kembalian', 10)->nullable();
             $table->date('tanggal')->nullable();
             $table->timestamps();
         });

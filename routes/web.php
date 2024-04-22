@@ -36,5 +36,5 @@ Route::get('/transaksi', [PembelianController::class, 'create']);
 Route::post('/pembelian/siap', [PembelianController::class, 'create']);
 Route::post('/pembelian/simpan{id}', [PembelianController::class, 'store']);
 Route::get('/pembelian{id}', [PembelianController::class, 'show']);
-Route::post('/pembelian/ubah{id}', [PembelianController::class, 'update']);
+Route::post('/pembelian/selesai{id}', [PembelianController::class, 'update'])->name('pembelian.selesai{id}');
 Route::get('/pembelian/hapus{id}', [PembelianController::class, 'destroy']);

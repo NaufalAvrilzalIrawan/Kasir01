@@ -23,8 +23,8 @@ return new class extends Migration
                   ->references('produkID')
                   ->on('produk')
                   ->onDelete('cascade');
-            $table->string('jumlah');
-            $table->decimal('subtotal');
+            $table->integer('jumlah')->unsigned();
+            $table->decimal('subtotal', 10);
             $table->timestamps();
         });
     }

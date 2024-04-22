@@ -12,6 +12,7 @@
 
     <label for="member" class="form-label">Member</label>
     <select class="form-select" id="member" name="member" required>
+      <option value="Bukan member">Bukan member</option>
       @foreach ($members as $member)
         <option value="{{ $member->nama }}">{{ $member->nama }}</option>
       @endforeach
@@ -78,26 +79,47 @@
             </tr>
         </thead>
         <tbody>
-            
+            <!-- data from ajax -->
         </tbody>
         <tfoot>
             <tr>
                 <th colspan="3">Total</th>
-                <th colspan="2">Rp</th>
+                <th colspan="2" id="totalCol"></th>
             </tr>
         </tfoot>
     </table>
 </div>
-
-<div class="col-md-4">
+<form class="row" action="/pembelian/selesai{{ $pembelian->pembelianID }}" method="post" >
+  @csrf
+  <div class="col-md-4">
     <div class="card">
+      <input type="hidden" class="form-control" id="total" name="total" readonly>
         <div class="card-body">
-            <label for="bayar" class="form-label">Bayar</label>
-            <input type="number" class="form-control" id="bayar" name="bayar" required>
+            <label for="totalAkhir" class="form-label">Total Akhir</label>
+            <input type="number" class="form-control" id="totalAkhir" name="totalAkhir" readonly>
         </div>
     </div>
-    
   </div>
+  
+  <div class="col-md-4">
+      <div class="card">
+          <div class="card-body">
+              <label for="bayar" class="form-label">Bayar</label>
+              <input type="number" class="form-control" id="bayar" name="bayar" required>
+          </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card">
+          <div class="card-body">
+              <label for="kembalian" class="form-label">Kembalian</label>
+              <input type="number" class="form-control" id="kembalian" name="kembalian" required>
+              <button class="btn btn-success" type="submit" id="selesaiBtn" disabled>Selesai</button>
+          </div>
+      </div>
+    </div>
+  </form>
 @php
 var_dump($produk[0]->namaProduk);   
 @endphp
